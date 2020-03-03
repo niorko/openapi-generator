@@ -907,9 +907,24 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             if (modelHasPropertyWithEscapedName) {
                 cm.vendorExtensions.put("x-codegen-has-escaped-property-names", true);
             }
+            setModelVendorExtensions(cm);
         }
 
         return postProcessedModelsEnum;
+    }
+
+    private void setModelVendorExtensions(CodegenModel model) {        
+        if (model.vars.isEmpty() && model.imports.isEmpty() && !model.isArrayModel) {
+            markModelAsTypeAlias(model);
+        }
+    }
+
+    private void markModelAsTypeAlias(CodegenModel model) {
+        model.isAlias = true;
+
+        if (model.dataType.isEmpty()) {
+            model.dataType = model.parent;
+        }
     }
 
     @Override
