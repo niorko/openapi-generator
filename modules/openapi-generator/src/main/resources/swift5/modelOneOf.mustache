@@ -1,0 +1,31 @@
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{classname}}: Codable {
+
+    {{#oneOf}}
+    case {{#lambda.camelcase}}{{.}}{{/lambda.camelcase}}({{.}})
+    {{/oneOf}}
+
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init(from decoder: Decoder) throws {
+        
+        {{#oneOf}}
+        if let data = try? {{.}}(from: decoder) {
+            self = .{{#lambda.camelcase}}{{.}}{{/lambda.camelcase}}(data)
+            return
+        }
+
+        {{/oneOf}}
+        throw DecodingError.typeMismatch(
+            Self.self,
+            DecodingError.Context(codingPath: [], debugDescription: "Unable to decode OneOf")
+        )
+    }
+
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        {{#oneOf}}
+        case .{{#lambda.camelcase}}{{.}}{{/lambda.camelcase}}(let data):
+            try container.encode(data)
+        {{/oneOf}}
+        }
+    }
+}

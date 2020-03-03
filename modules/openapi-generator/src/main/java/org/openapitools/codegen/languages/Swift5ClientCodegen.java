@@ -74,6 +74,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     protected String apiDocPath = "docs/";
     protected String modelDocPath = "docs/";
 
+    public final class VendorExtension {
+        public final static String ONE_OF = "x-is-oneof";
+    }
+
     /**
      * Constructor for the swift5 language codegen module.
      */
@@ -916,6 +920,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     private void setModelVendorExtensions(CodegenModel model) {        
         if (model.vars.isEmpty() && model.imports.isEmpty() && !model.isArrayModel) {
             markModelAsTypeAlias(model);
+        }
+
+        if (!model.oneOf.isEmpty()) {
+            model.vendorExtensions.put(VendorExtension.ONE_OF, true);
         }
     }
 
