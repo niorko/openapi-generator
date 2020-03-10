@@ -188,7 +188,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
         return requestTask
     }
 
-    fileprivate func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
 
         if let error = error {
             completion(.failure(ErrorResponse.error(-1, data, response, error)))
@@ -281,7 +281,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 }
 
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<T> {
-    override fileprivate func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
+    override {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
 
         if let error = error {
             completion(.failure(ErrorResponse.error(-1, data, response, error)))
