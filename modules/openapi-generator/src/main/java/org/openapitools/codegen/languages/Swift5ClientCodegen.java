@@ -607,8 +607,11 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
                 "OpenAPIDateWithoutTime.swift"));
         }
         supportingFiles.add(new SupportingFile("APIs.mustache",
+                sourceFolder + File.separator + "Config",
+                projectName + "Config.swift"));
+        supportingFiles.add(new SupportingFile("RequestBuilder.mustache",
                 sourceFolder,
-                "APIs.swift"));
+                "RequestBuilder.swift"));
         if (validatable) {
             supportingFiles.add(new SupportingFile("Validation.mustache",
             sourceFolder,
