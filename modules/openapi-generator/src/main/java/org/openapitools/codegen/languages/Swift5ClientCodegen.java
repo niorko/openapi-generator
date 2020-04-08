@@ -434,8 +434,11 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
                 sourceFolder,
                 "Models.swift"));
         supportingFiles.add(new SupportingFile("APIs.mustache",
+                sourceFolder + File.separator + "Config",
+                projectName + "Config.swift"));
+        supportingFiles.add(new SupportingFile("RequestBuilder.mustache",
                 sourceFolder,
-                "APIs.swift"));
+                "RequestBuilder.swift"));
         supportingFiles.add(new SupportingFile("CodableHelper.mustache",
                 sourceFolder,
                 "CodableHelper.swift"));

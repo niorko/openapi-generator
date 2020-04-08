@@ -180,9 +180,9 @@ extension HTTPURLResponse {
 }
 
 {{#usePromiseKit}}extension RequestBuilder {
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func execute() -> Promise<Response<T>>  {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func execute(dispatchQueue: DispatchQueue) -> Promise<Response<T>>  {
         let deferred = Promise<Response<T>>.pending()
-        self.execute { result in
+        self.execute(dispatchQueue) { result in
             switch result {
             case let .success(response):
                 deferred.resolver.fulfill(response)
