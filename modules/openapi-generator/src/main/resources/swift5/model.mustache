@@ -10,12 +10,13 @@ import Foundation
 import AnyCodable
 #endif{{#useVapor}}
 import Vapor{{/useVapor}}
+
+
 {{#swiftUseApiNamespace}}
-
-@available(*, deprecated, renamed: "{{projectName}}API.{{classname}}")
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} typealias {{classname}} = {{projectName}}API.{{classname}}
-
-extension {{projectName}}API {
+extension {{projectName}}.{{specName}} {
+{{/swiftUseApiNamespace}}
+{{^swiftUseApiNamespace}}
+extension {{specName}} {
 {{/swiftUseApiNamespace}}
 {{#description}}
 
@@ -25,6 +26,5 @@ extension {{projectName}}API {
 {{> modelArray}}{{/isArray}}{{^isArray}}{{#isEnum}}
 {{> modelEnum}}{{/isEnum}}{{^isEnum}}
 {{> modelObject}}{{/isEnum}}{{/isArray}}{{/vendorExtensions.x-is-one-of-interface}}{{/model}}{{/models}}
-{{#swiftUseApiNamespace}}
+
 }
-{{/swiftUseApiNamespace}}
