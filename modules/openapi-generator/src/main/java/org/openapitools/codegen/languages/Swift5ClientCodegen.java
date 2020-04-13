@@ -42,6 +42,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     private static final Logger LOGGER = LoggerFactory.getLogger(Swift5ClientCodegen.class);
 
     public static final String PROJECT_NAME = "projectName";
+    public static final String SPEC_NAME = "specName";
     public static final String RESPONSE_AS = "responseAs";
     public static final String OBJC_COMPATIBLE = "objcCompatible";
     public static final String POD_SOURCE = "podSource";
@@ -354,6 +355,9 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
         }
         sourceFolder = projectName + File.separator + sourceFolder;
 
+        // Setup SpecsName
+        additionalProperties.put(SPEC_NAME, getSpecName());
+
         // Setup nonPublicApi option, which generates code with reduced access
         // modifiers; allows embedding elsewhere without exposing non-public API calls
         // to consumers
@@ -439,6 +443,9 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
         supportingFiles.add(new SupportingFile("RequestBuilder.mustache",
                 sourceFolder,
                 "RequestBuilder.swift"));
+        supportingFiles.add(new SupportingFile("spec.mustache",
+                sourceFolder + File.separator + "Specs",
+                getSpecName() + ".swift"));
         supportingFiles.add(new SupportingFile("CodableHelper.mustache",
                 sourceFolder,
                 "CodableHelper.swift"));
@@ -497,6 +504,14 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             return this.reservedWordsMappings().get(name);
         }
         return "_" + name;  // add an underscore to the name
+    }
+
+    public String getSpecName() {
+        String path = getInputSpec();
+        String[] segments = path.split("/");
+        String specNameWithExtension = segments[segments.length-1];
+        String specName = specNameWithExtension.split("\\.")[0];
+        return camelize(specName);
     }
 
     @Override
@@ -602,7 +617,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     @Override
     public String toModelFilename(String name) {
         // should be the same as the model name
-        return toModelName(name);
+        return getSpecName() + "_" + toModelName(name);
     }
 
     @Override
@@ -646,6 +661,11 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             return "DefaultAPI";
         }
         return camelize(apiNamePrefix + "_" + name) + "API";
+    }
+
+    @Override
+    public String toApiFilename(String name) {
+        return getSpecName() + "_" + super.toApiFilename(name);
     }
 
     @Override

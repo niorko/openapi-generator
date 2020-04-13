@@ -11,7 +11,10 @@ import RxSwift{{/useRxSwift}}{{#useCombine}}
 import Combine{{/useCombine}}
 
 {{#swiftUseApiNamespace}}
-extension {{projectName}} {
+extension {{projectName}}.{{specName}} {
+{{/swiftUseApiNamespace}}
+{{^swiftUseApiNamespace}}
+extension {{specName}} {
 {{/swiftUseApiNamespace}}
 
 {{#description}}
@@ -250,7 +253,6 @@ extension {{projectName}} {
 
 {{/operation}}
 }
-{{#swiftUseApiNamespace}}
+
 }
-{{/swiftUseApiNamespace}}
 {{/operations}}

@@ -7,6 +7,13 @@
 
 import Foundation
 
+{{#swiftUseApiNamespace}}
+extension {{projectName}}.{{specName}} {
+{{/swiftUseApiNamespace}}
+{{^swiftUseApiNamespace}}
+extension {{specName}} {
+{{/swiftUseApiNamespace}}
+
 {{#vendorExtensions.x-is-oneof}}
 {{> modelOneOf}}
 {{/vendorExtensions.x-is-oneof}}
@@ -27,3 +34,5 @@ import Foundation
 {{/vendorExtensions.x-is-oneof}}
 {{/model}}
 {{/models}}
+
+}
