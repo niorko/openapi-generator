@@ -55,6 +55,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     public static final String POD_SCREENSHOTS = "podScreenshots";
     public static final String POD_DOCUMENTATION_URL = "podDocumentationURL";
     public static final String SWIFT_USE_API_NAMESPACE = "swiftUseApiNamespace";
+    public static final String SWIFT_API_CONFIG_PER_SPEC = "swiftApiConfigPerSpec";
     public static final String DEFAULT_POD_AUTHORS = "OpenAPI Generator";
     public static final String LENIENT_TYPE_CAST = "lenientTypeCast";
     protected static final String LIBRARY_ALAMOFIRE = "alamofire";
@@ -68,6 +69,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     protected boolean nonPublicApi = false;
     protected boolean objcCompatible = false;
     protected boolean lenientTypeCast = false;
+    protected boolean swiftApiConfigPerSpec = false;
     protected boolean swiftUseApiNamespace;
     protected String[] responseAs = new String[0];
     protected String sourceFolder = "Classes" + File.separator + "OpenAPIs";
@@ -245,6 +247,9 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
         cliOptions.add(new CliOption(SWIFT_USE_API_NAMESPACE,
                 "Flag to make all the API classes inner-class "
                         + "of {{projectName}}API"));
+        cliOptions().add(new CliOption(SWIFT_API_CONFIG_PER_SPEC,
+                "Flag to generate separate configuration for every spec file")
+                .defaultValue(Boolean.FALSE.toString()));
         cliOptions.add(new CliOption(CodegenConstants.HIDE_GENERATION_TIMESTAMP,
                 CodegenConstants.HIDE_GENERATION_TIMESTAMP_DESC)
                 .defaultValue(Boolean.TRUE.toString()));
@@ -406,6 +411,11 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             setSwiftUseApiNamespace(convertPropertyToBooleanAndWriteBack(SWIFT_USE_API_NAMESPACE));
         }
 
+        // If option is enabled generate separate config file for each spec
+        if (additionalProperties.containsKey(SWIFT_API_CONFIG_PER_SPEC)) {
+            setSwiftApiConfigPerSpec(convertPropertyToBooleanAndWriteBack(SWIFT_API_CONFIG_PER_SPEC));
+        }
+
         if (!additionalProperties.containsKey(POD_AUTHORS)) {
             additionalProperties.put(POD_AUTHORS, DEFAULT_POD_AUTHORS);
         }
@@ -437,9 +447,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
         supportingFiles.add(new SupportingFile("Models.mustache",
                 sourceFolder,
                 "Models.swift"));
+        String configBaseName = swiftApiConfigPerSpec ? getSpecName() : projectName;
         supportingFiles.add(new SupportingFile("APIs.mustache",
                 sourceFolder + File.separator + "Config",
-                projectName + "Config.swift"));
+                configBaseName + "Config.swift"));
         supportingFiles.add(new SupportingFile("RequestBuilder.mustache",
                 sourceFolder,
                 "RequestBuilder.swift"));
@@ -810,6 +821,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
 
     public void setSwiftUseApiNamespace(boolean swiftUseApiNamespace) {
         this.swiftUseApiNamespace = swiftUseApiNamespace;
+    }
+
+    public void setSwiftApiConfigPerSpec(boolean swiftApiConfigPerSpec) {
+        this.swiftApiConfigPerSpec = swiftApiConfigPerSpec;
     }
 
     @Override
