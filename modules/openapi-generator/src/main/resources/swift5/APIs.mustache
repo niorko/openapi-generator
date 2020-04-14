@@ -8,7 +8,14 @@ import Foundation{{#useVapor}}
 import Vapor
 {{/useVapor}}
 
+{{#swiftApiConfigPerSpec}}
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} extension {{projectName}} {
+    
+enum {{specName}} {
+{{/swiftApiConfigPerSpec}}
+{{^swiftApiConfigPerSpec}}
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{projectName}} {
+{{/swiftApiConfigPerSpec}}
 
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum Config {
         {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var basePath = "{{{basePath}}}"
@@ -23,5 +30,9 @@ import Vapor
         {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var apiResponseQueue: DispatchQueue = .main
         {{/useVapor}}
     }
+
+{{#swiftApiConfigPerSpec}}
+}
+{{/swiftApiConfigPerSpec}}
 
 }
