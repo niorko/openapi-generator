@@ -443,9 +443,10 @@ extension {{specName}} {
 
         let localVariableRequestBuilder: RequestBuilder<{{{returnType}}}{{#returnType}}{{#isResponseOptional}}?{{/isResponseOptional}}{{/returnType}}{{^returnType}}Void{{/returnType}}>.Type = {{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.requestBuilderFactory.{{#returnType}}getBuilder(){{/returnType}}{{^returnType}}getNonDecodableBuilder(){{/returnType}}
 
-        return localVariableRequestBuilder.init(method: "{{httpMethod}}", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: {{#hasAuthMethods}}true{{/hasAuthMethods}}{{^hasAuthMethods}}false{{/hasAuthMethods}})
-            .addHeaders({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.customHeaders)
-            .setCredential({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.credential)
+        let requestBuilder = localVariableRequestBuilder.init(method: "{{httpMethod}}", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: {{#hasAuthMethods}}true{{/hasAuthMethods}}{{^hasAuthMethods}}false{{/hasAuthMethods}})
+        requestBuilder.addHeaders({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.customHeaders)
+        requestBuilder.setCredential({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.credential)
+        return requestBuilder
     }
 {{/useVapor}}
 {{/operation}}

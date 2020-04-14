@@ -76,9 +76,8 @@ import Vapor
         return self
     }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func setCredential(_ credential: URLCredential?) -> Self {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func setCredential(_ credential: URLCredential?) {
         self.credential = credential
-        return self
     }
 }
 
