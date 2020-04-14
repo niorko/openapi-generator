@@ -27,12 +27,10 @@ import Foundation
         self.headers = headers
     }
 
-    @discardableResult
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func addHeaders(_ aHeaders: [String:String]) -> Self {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func addHeaders(_ aHeaders: [String:String]) {
         for (header, value) in aHeaders {
             headers[header] = value
         }
-        return self
     }
 
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func execute(_ apiResponseQueue: DispatchQueue, _ completion: @escaping (_ result: Result<Response<T>, Error>) -> Void) { }
@@ -45,10 +43,8 @@ import Foundation
         return self
     }
 
-    @discardableResult
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func setCredential(_ credential: URLCredential?) -> Self {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func setCredential(_ credential: URLCredential?) {
         self.credential = credential
-        return self
     }
 }
 

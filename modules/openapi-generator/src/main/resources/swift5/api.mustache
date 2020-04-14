@@ -245,10 +245,11 @@ extension {{specName}} {
         ]
         let headerParameters = APIHelper.rejectNilHeaders(nillableHeaders){{/hasMore}}{{/headerParams}}
 
-        let requestBuilder: RequestBuilder<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}>.Type = {{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.requestBuilderFactory.{{#returnType}}getBuilder(){{/returnType}}{{^returnType}}getNonDecodableBuilder(){{/returnType}}
-        return requestBuilder.init(method: "{{httpMethod}}", URLString: (url?.string ?? URLString), parameters: parameters, isBody: {{hasBodyParam}}{{#headerParams}}{{^secondaryParam}}, headers: headerParameters{{/secondaryParam}}{{/headerParams}})
-            .addHeaders({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.customHeaders)
-            .setCredential({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.credential)
+        let requestBuilderType: RequestBuilder<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}>.Type = {{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.requestBuilderFactory.{{#returnType}}getBuilder(){{/returnType}}{{^returnType}}getNonDecodableBuilder(){{/returnType}}
+        let requestBuilder = requestBuilderType.init(method: "{{httpMethod}}", URLString: (url?.string ?? URLString), parameters: parameters, isBody: {{hasBodyParam}}{{#headerParams}}{{^secondaryParam}}, headers: headerParameters{{/secondaryParam}}{{/headerParams}})
+        requestBuilder.addHeaders({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.customHeaders)
+        requestBuilder.setCredential({{projectName}}{{#swiftApiConfigPerSpec}}.{{specName}}{{/swiftApiConfigPerSpec}}.Config.credential)
+        return requestBuilder
     }
 
 {{/operation}}
