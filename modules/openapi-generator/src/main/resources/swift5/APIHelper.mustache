@@ -6,9 +6,19 @@
 
 import Foundation
 
+
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} protocol BackendConfig {
+    static var basePath: String { get set }
+    static var credential: URLCredential? { get set }
+    static var customHeaders: [String:String] { get set }
+    static var requestBuilderFactory: RequestBuilderFactory { get set }
+    static var apiResponseQueue: DispatchQueue { get set }
+}
+
 {{#swiftApiConfigPerSpec}}
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{projectName}} { }
 {{/swiftApiConfigPerSpec}}
+
 
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} struct APIHelper {
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static func rejectNil(_ source: [String:Any?]) -> [String:Any]? {
