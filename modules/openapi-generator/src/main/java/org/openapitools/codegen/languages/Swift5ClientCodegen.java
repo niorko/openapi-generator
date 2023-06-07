@@ -731,7 +731,13 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             Schema inner = getAdditionalProperties(p);
             return "[String: " + getTypeDeclaration(inner) + "]";
         }
-        return super.getTypeDeclaration(p);
+        String typeDeclaration = super.getTypeDeclaration(p);
+
+        if (typeDeclaration.contentEquals("Dictionary")) {
+            return "[String: AnyCodable]";
+        }
+
+        return typeDeclaration;
     }
 
     @Override
