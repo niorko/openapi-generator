@@ -34,12 +34,12 @@ import Foundation
         dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
     }
 
-    override init() {
+    override {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init() {
         super.init()
         setup()
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
