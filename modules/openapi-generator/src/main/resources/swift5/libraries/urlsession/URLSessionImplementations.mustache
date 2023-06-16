@@ -28,10 +28,10 @@ class URLSessionRequestBuilderFactory: RequestBuilderFactory {
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
 
 // Store the URLSession's delegate to retain its reference
-private let sessionDelegate = SessionDelegate()
+public let SharedOpenAPISessionDelegate: URLSessionTaskDelegate = SessionDelegate()
 
 // Store the URLSession to retain its reference
-private let defaultURLSession = URLSession(configuration: .default, delegate: sessionDelegate, delegateQueue: nil)
+private let defaultURLSession = URLSession(configuration: .default, delegate: SharedOpenAPISessionDelegate, delegateQueue: nil)
 
 // Store current taskDidReceiveChallenge for every URLSessionTask
 private var challengeHandlerStore = SynchronizedDictionary<Int, {{projectName}}APIChallengeHandler>()
