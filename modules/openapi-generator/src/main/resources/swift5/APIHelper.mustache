@@ -11,7 +11,7 @@ import Vapor{{/useVapor}}
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} protocol BackendConfig {
     static var basePath: String { get set }
     static var credential: URLCredential? { get set }
-    static var customHeaders: [String:String] { get set }
+    static var customHeaders: [String: String] { get set }
     static var requestBuilderFactory: RequestBuilderFactory { get set }
     static var apiResponseQueue: DispatchQueue { get set }
 }
@@ -36,7 +36,7 @@ import Vapor{{/useVapor}}
     }
 
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static func rejectNilHeaders(_ source: [String: Any?]) -> [String: String] {
-        return source.reduce(into: [String: String]()) { result, item in
+        source.reduce(into: [String: String]()) { result, item in
             if let collection = item.value as? [Any?] {
                 result[item.key] = collection
                     .compactMap { value in convertAnyToString(value) }

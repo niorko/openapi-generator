@@ -39,7 +39,7 @@ import Foundation
         setup()
     }
 
-    required {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init?(coder aDecoder: NSCoder) {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
