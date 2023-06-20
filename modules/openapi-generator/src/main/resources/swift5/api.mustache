@@ -5,7 +5,8 @@
 // https://openapi-generator.tech
 //
 
-import Foundation{{#usePromiseKit}}
+import Foundation{{#usePfDependencies}}
+import Dependencies{{/usePfDependencies}}{{#usePromiseKit}}
 import PromiseKit{{/usePromiseKit}}{{#useRxSwift}}
 import RxSwift{{/useRxSwift}}{{#useCombine}}
 #if canImport(Combine)
@@ -26,8 +27,12 @@ extension {{specName}} {
 
 {{#description}}
 /** {{{.}}} */{{/description}}
-{{#objcCompatible}}@objcMembers {{/objcCompatible}}{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class {{classname}}{{#objcCompatible}} : NSObject{{/objcCompatible}} {
+{{#objcCompatible}}@objcMembers {{/objcCompatible}}{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class {{classname}}{{#usePfDependencies}}: DependencyKey{{/usePfDependencies}}{{^usePfDependencies}}{{#objcCompatible}} : NSObject{{/objcCompatible}}{{/usePfDependencies}} {
+{{#usePfDependencies}}
 
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static let liveValue = {{classname}}()
+
+{{/usePfDependencies}}
     {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init() { }
 
 {{#operation}}
@@ -451,5 +456,12 @@ extension {{specName}} {
 {{/operation}}
 }
 
+}{{#usePfDependencies}}
+
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} extension DependencyValues {
+    var {{#lambda.camelcase_param}}{{specName}}{{/lambda.camelcase_param}}_{{classname}}: {{specName}}.{{classname}} {
+        get { self[{{specName}}.{{classname}}.self] }
+        set { self[{{specName}}.{{classname}}.self] = newValue }
+    }
 }
-{{/operations}}
+{{/usePfDependencies}}{{/operations}}

@@ -17,6 +17,7 @@
 
 package org.openapitools.codegen.languages;
 
+
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.io.FilenameUtils;
@@ -31,8 +32,11 @@ import org.openapitools.codegen.model.ModelsMap;
 import org.openapitools.codegen.model.OperationMap;
 import org.openapitools.codegen.model.OperationsMap;
 import org.openapitools.codegen.utils.ModelUtils;
+import org.openapitools.codegen.templating.mustache.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableMap;
+import com.samskivert.mustache.Mustache.Lambda;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +74,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     public static final String USE_SPM_FILE_STRUCTURE = "useSPMFileStructure";
     public static final String SWIFT_PACKAGE_PATH = "swiftPackagePath";
     public static final String IMPLICIT_HEADERS_REGEX = "implicitHeadersRegex";
+    public static final String USE_PF_DEPENDENCIES = "usePfDependencies";
 
     public static final String USE_CLASSES = "useClasses";
     public static final String USE_BACKTICK_ESCAPES = "useBacktickEscapes";
@@ -313,6 +318,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
                 .defaultValue(Boolean.FALSE.toString()));
 
         cliOptions.add(new CliOption(IMPLICIT_HEADERS_REGEX, "Skip header parameters that matches given regex in the generated API methods for Swift5"));
+        
+        cliOptions.add(new CliOption(USE_PF_DEPENDENCIES, 
+            "Generate DependencyKey and DependencyValues for APIs")
+            .defaultValue(Boolean.FALSE.toString()));
 
         cliOptions.add(new CliOption(HASHABLE_MODELS,
             "Make hashable models (default: true)")
@@ -1237,6 +1246,12 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
 
     private boolean shouldBeImplicitHeader(CodegenParameter parameter) {
         return StringUtils.isNotBlank(implicitHeadersRegex) && parameter.baseName.matches(implicitHeadersRegex);
+    }
+
+    @Override
+    protected ImmutableMap.Builder<String, Lambda> addMustacheLambdas() {
+        return super.addMustacheLambdas()
+                .put("camelcase_param", new CamelCaseLambda().generator(this).escapeAsParamName(true));
     }
 
     @Override
