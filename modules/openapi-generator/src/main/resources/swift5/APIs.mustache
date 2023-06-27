@@ -4,16 +4,19 @@
 // https://openapi-generator.tech
 //
 
-import Foundation{{#useVapor}}
+import Foundation{{#customApiDtoImport}}
+import {{customApiDtoImport}}{{/customApiDtoImport}}{{#useVapor}}
 import Vapor
 {{/useVapor}}
 
 {{#swiftApiConfigPerSpec}}
+
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} extension {{projectName}} {
     
 enum {{specName}} {
 {{/swiftApiConfigPerSpec}}
 {{^swiftApiConfigPerSpec}}
+
 {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{projectName}} {
 {{/swiftApiConfigPerSpec}}
 

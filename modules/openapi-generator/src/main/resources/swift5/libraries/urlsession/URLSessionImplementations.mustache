@@ -15,12 +15,15 @@ import UniformTypeIdentifiers
 
 extension URLSession: URLSessionProtocol {}
 
-class URLSessionRequestBuilderFactory: RequestBuilderFactory {
-    func getNonDecodableBuilder<T>() -> RequestBuilder<T>.Type {
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} class URLSessionRequestBuilderFactory: RequestBuilderFactory {
+
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init() { }
+
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func getNonDecodableBuilder<T>() -> RequestBuilder<T>.Type {
         URLSessionRequestBuilder<T>.self
     }
 
-    func getBuilder<T: Decodable>() -> RequestBuilder<T>.Type {
+    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func getBuilder<T: Decodable>() -> RequestBuilder<T>.Type {
         URLSessionDecodableRequestBuilder<T>.self
     }
 }

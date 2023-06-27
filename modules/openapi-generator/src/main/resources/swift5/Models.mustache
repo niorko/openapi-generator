@@ -7,7 +7,7 @@
 import Foundation{{#useAlamofire}}
 import Alamofire{{/useAlamofire}}
 
-protocol JSONEncodable {
+{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} protocol JSONEncodable {
     func encodeToJSON() -> Any
 }
 
