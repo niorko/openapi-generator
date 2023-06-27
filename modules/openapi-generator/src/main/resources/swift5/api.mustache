@@ -5,7 +5,8 @@
 // https://openapi-generator.tech
 //
 
-import Foundation{{#usePfDependencies}}
+import Foundation{{#customApiDtoImport}}
+import {{customApiDtoImport}}{{/customApiDtoImport}}{{#usePfDependencies}}
 import Dependencies{{/usePfDependencies}}{{#usePromiseKit}}
 import PromiseKit{{/usePromiseKit}}{{#useRxSwift}}
 import RxSwift{{/useRxSwift}}{{#useCombine}}

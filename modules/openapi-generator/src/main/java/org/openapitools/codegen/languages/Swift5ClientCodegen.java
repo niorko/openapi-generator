@@ -75,6 +75,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     public static final String SWIFT_PACKAGE_PATH = "swiftPackagePath";
     public static final String IMPLICIT_HEADERS_REGEX = "implicitHeadersRegex";
     public static final String USE_PF_DEPENDENCIES = "usePfDependencies";
+    public static final String CUSTOM_API_DTO_IMPORT = "customApiDtoImport";
 
     public static final String USE_CLASSES = "useClasses";
     public static final String USE_BACKTICK_ESCAPES = "useBacktickEscapes";
@@ -102,6 +103,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
     protected boolean removeMigrationProjectNameClass = false;
     protected boolean swiftUseApiNamespace = false;
     protected String implicitHeadersRegex = null;
+    protected String customApiDtoImports = null;
     protected boolean useSPMFileStructure = false;
     protected String swiftPackagePath = "Classes" + File.separator + "OpenAPIs";
     protected boolean useClasses = false;
@@ -318,6 +320,7 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
                 .defaultValue(Boolean.FALSE.toString()));
 
         cliOptions.add(new CliOption(IMPLICIT_HEADERS_REGEX, "Skip header parameters that matches given regex in the generated API methods for Swift5"));
+        cliOptions.add(new CliOption(CUSTOM_API_DTO_IMPORT, "Add custom import to every API and DTO"));
         
         cliOptions.add(new CliOption(USE_PF_DEPENDENCIES, 
             "Generate DependencyKey and DependencyValues for APIs")
@@ -581,6 +584,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
 
         if (additionalProperties.containsKey(IMPLICIT_HEADERS_REGEX)) {
             setImplicitHeadersRegex(additionalProperties.get(IMPLICIT_HEADERS_REGEX).toString());
+        }
+
+        if (additionalProperties.containsKey(CUSTOM_API_DTO_IMPORT)) {
+            setCustomApiDtoImports(additionalProperties.get(CUSTOM_API_DTO_IMPORT).toString());
         }
 
         setLenientTypeCast(convertPropertyToBooleanAndWriteBack(LENIENT_TYPE_CAST));
@@ -1078,6 +1085,10 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
 
     public void setImplicitHeadersRegex(String implicitHeadersRegex) {
         this.implicitHeadersRegex = implicitHeadersRegex;
+    }
+
+    public void setCustomApiDtoImports(String customApiDtoImports) {
+        this.customApiDtoImports = customApiDtoImports;
     }
 
     public void setSwiftApiConfigPerSpec(boolean swiftApiConfigPerSpec) {

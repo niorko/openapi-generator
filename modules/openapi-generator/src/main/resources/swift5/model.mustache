@@ -9,7 +9,8 @@ import Foundation
 #if canImport(AnyCodable)
 import AnyCodable
 #endif{{#useVapor}}
-import Vapor{{/useVapor}}
+import Vapor{{/useVapor}}{{#customApiDtoImport}}
+import {{customApiDtoImport}}{{/customApiDtoImport}}
 
 
 {{#swiftUseApiNamespace}}
