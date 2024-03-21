@@ -28,10 +28,10 @@ extension URLSession: URLSessionProtocol {}
     }
 }
 
-{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
+typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
 
 // Store the URLSession's delegate to retain its reference
-public let SharedOpenAPISessionDelegate: URLSessionTaskDelegate = SessionDelegate()
+let SharedOpenAPISessionDelegate: URLSessionTaskDelegate = SessionDelegate()
 
 // Store the URLSession to retain its reference
 private let defaultURLSession = URLSession(configuration: .default, delegate: SharedOpenAPISessionDelegate, delegateQueue: nil)
@@ -42,14 +42,14 @@ private var challengeHandlerStore = SynchronizedDictionary<Int, {{projectName}}A
 // Store current URLCredential for every URLSessionTask
 private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class URLSessionRequestBuilder<T>: RequestBuilder<T> {
+class URLSessionRequestBuilder<T>: RequestBuilder<T> {
 
     /**
      May be assigned if you want to control the authentication challenges.
      */
-    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}var taskDidReceiveChallenge: {{projectName}}APIChallengeHandler?
+    var taskDidReceiveChallenge: {{projectName}}APIChallengeHandler?
 
-    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}required init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
+    required init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
         super.init(method: method, URLString: URLString, parameters: parameters, headers: headers, requiresAuthentication: requiresAuthentication)
     }
 
@@ -57,7 +57,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
      May be overridden by a subclass if you want to control the URLSession
      configuration.
      */
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func createURLSession() -> URLSessionProtocol {
+    func createURLSession() -> URLSessionProtocol {
         defaultURLSession
     }
 
@@ -68,7 +68,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
      Return nil to use the default behavior (inferring the Content-Type from
      the file extension).  Return the desired Content-Type otherwise.
      */
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func contentTypeForFormPart(fileURL: URL) -> String? {
+    func contentTypeForFormPart(fileURL: URL) -> String? {
         nil
     }
 
@@ -76,7 +76,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
      May be overridden by a subclass if you want to control the URLRequest
      configuration (e.g. to override the cache policy).
      */
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func createURLRequest(urlSession: URLSessionProtocol, method: HTTPMethod, encoding: ParameterEncoding, headers: [String: String]) throws -> URLRequest {
+    func createURLRequest(urlSession: URLSessionProtocol, method: HTTPMethod, encoding: ParameterEncoding, headers: [String: String]) throws -> URLRequest {
 
         guard let url = URL(string: URLString) else {
             throw DownloadException.requestMissingURL
@@ -100,7 +100,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
     }
 
     @discardableResult
-    override {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func execute(_ apiResponseQueue: DispatchQueue, _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) -> RequestTask {
+    override func execute(_ apiResponseQueue: DispatchQueue, _ completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) -> RequestTask {
         let urlSession = createURLSession()
 
         guard let xMethod = HTTPMethod(rawValue: method) else {
@@ -165,7 +165,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
         return requestTask
     }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
+    func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
 
         if let error = error {
             completion(.failure(ErrorResponse.error(-1, data, response, error)))
@@ -193,7 +193,7 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
     }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func buildHeaders() -> [String: String] {
+    func buildHeaders() -> [String: String] {
         var httpHeaders: [String: String] = [:]
         for (key, value) in headers {
             httpHeaders[key] = value
@@ -254,8 +254,8 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
 
 }
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<T> {
-    override {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
+class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<T> {
+    override func processRequestResponse(urlRequest: URLRequest, data: Data?, response: URLResponse?, error: Error?, completion: @escaping (_ result: Swift.Result<Response<T>, ErrorResponse>) -> Void) {
 
         if let error = error {
             completion(.failure(ErrorResponse.error(-1, data, response, error)))

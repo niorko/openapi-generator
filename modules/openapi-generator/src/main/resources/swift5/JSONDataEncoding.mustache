@@ -7,7 +7,7 @@
 
 import Foundation
 
-{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}struct JSONDataEncoding {
+struct JSONDataEncoding {
 
     // MARK: Properties
 
@@ -24,7 +24,7 @@ import Foundation
     /// - throws: An `Error` if the encoding process encounters an error.
     ///
     /// - returns: The encoded request.
-    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}func encode(_ urlRequest: URLRequest, with parameters: [String: Any]?) -> URLRequest {
+    func encode(_ urlRequest: URLRequest, with parameters: [String: Any]?) -> URLRequest {
         var urlRequest = urlRequest
 
         guard let jsonData = parameters?[JSONDataEncoding.jsonDataKey] as? Data, !jsonData.isEmpty else {
@@ -40,7 +40,7 @@ import Foundation
         return urlRequest
     }
 
-    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static func encodingParameters(jsonData: Data?) -> [String: Any]? {
+    static func encodingParameters(jsonData: Data?) -> [String: Any]? {
         var returnedParams: [String: Any]?
         if let jsonData = jsonData, !jsonData.isEmpty {
             var params: [String: Any] = [:]
