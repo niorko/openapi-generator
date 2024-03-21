@@ -10,7 +10,7 @@ import Foundation
 extension {{projectName}} {
 {{/swiftUseApiNamespace}}
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{specName}} { }
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum {{specName}} { }
 
 {{#swiftUseApiNamespace}}
 }

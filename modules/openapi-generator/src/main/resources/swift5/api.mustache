@@ -31,10 +31,10 @@ extension {{specName}} {
 {{#objcCompatible}}@objcMembers {{/objcCompatible}}{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}open{{/nonPublicApi}} class {{classname}}{{#usePfDependencies}}: DependencyKey{{/usePfDependencies}}{{^usePfDependencies}}{{#objcCompatible}} : NSObject{{/objcCompatible}}{{/usePfDependencies}} {
 {{#usePfDependencies}}
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static let liveValue = {{classname}}()
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static let liveValue = {{classname}}()
 
 {{/usePfDependencies}}
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init() { }
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}init() { }
 
 {{#operation}}
     {{#allParams}}
@@ -43,7 +43,7 @@ extension {{specName}} {
     /**
      * enum for parameter {{paramName}}
      */
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{enumName}}_{{operationId}}: {{^isContainer}}{{{dataType}}}{{/isContainer}}{{#isContainer}}String{{/isContainer}}, CaseIterable{{#useVapor}}, Content{{/useVapor}} {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum {{enumName}}_{{operationId}}: {{^isContainer}}{{{dataType}}}{{/isContainer}}{{#isContainer}}String{{/isContainer}}, CaseIterable{{#useVapor}}, Content{{/useVapor}} {
         {{^enumUnknownDefaultCase}}
         {{#allowableValues}}
         {{#enumVars}}
@@ -327,7 +327,7 @@ extension {{specName}} {
         }
     }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum {{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}} {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum {{#lambda.titlecase}}{{operationId}}{{/lambda.titlecase}} {
         {{#responses}}
         case http{{code}}({{#dataType}}value: {{{.}}}, {{/dataType}}raw: ClientResponse)
         {{/responses}}
@@ -459,7 +459,7 @@ extension {{specName}} {
 
 }{{#usePfDependencies}}
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} extension DependencyValues {
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}extension DependencyValues {
     var {{#lambda.camelcase_param}}{{specName}}{{/lambda.camelcase_param}}_{{classname}}: {{specName}}.{{classname}} {
         get { self[{{specName}}.{{classname}}.self] }
         set { self[{{specName}}.{{classname}}.self] = newValue }

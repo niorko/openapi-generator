@@ -26,15 +26,15 @@ import Foundation
         return encoder
     }()
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var dateFormatter: DateFormatter {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var dateFormatter: DateFormatter {
         get { customDateFormatter ?? defaultDateFormatter }
         set { customDateFormatter = newValue }
     }
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var jsonDecoder: JSONDecoder {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var jsonDecoder: JSONDecoder {
         get { customJSONDecoder ?? defaultJSONDecoder }
         set { customJSONDecoder = newValue }
     }
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} static var jsonEncoder: JSONEncoder {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var jsonEncoder: JSONEncoder {
         get { customJSONEncoder ?? defaultJSONEncoder }
         set { customJSONEncoder = newValue }
     }

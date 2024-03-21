@@ -9,26 +9,26 @@ import Foundation
 import UniformTypeIdentifiers
 #endif
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} protocol URLSessionProtocol {
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}protocol URLSessionProtocol {
     func dataTask(with request: URLRequest, completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 }
 
 extension URLSession: URLSessionProtocol {}
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} class URLSessionRequestBuilderFactory: RequestBuilderFactory {
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}class URLSessionRequestBuilderFactory: RequestBuilderFactory {
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} init() { }
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}init() { }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func getNonDecodableBuilder<T>() -> RequestBuilder<T>.Type {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}func getNonDecodableBuilder<T>() -> RequestBuilder<T>.Type {
         URLSessionRequestBuilder<T>.self
     }
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} func getBuilder<T: Decodable>() -> RequestBuilder<T>.Type {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}func getBuilder<T: Decodable>() -> RequestBuilder<T>.Type {
         URLSessionDecodableRequestBuilder<T>.self
     }
 }
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
 
 // Store the URLSession's delegate to retain its reference
 public let SharedOpenAPISessionDelegate: URLSessionTaskDelegate = SessionDelegate()
@@ -47,9 +47,9 @@ private var credentialStore = SynchronizedDictionary<Int, URLCredential>()
     /**
      May be assigned if you want to control the authentication challenges.
      */
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} var taskDidReceiveChallenge: {{projectName}}APIChallengeHandler?
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}var taskDidReceiveChallenge: {{projectName}}APIChallengeHandler?
 
-    {{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} required init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
+    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}required init(method: String, URLString: String, parameters: [String: Any]?, headers: [String: String] = [:], requiresAuthentication: Bool) {
         super.init(method: method, URLString: URLString, parameters: parameters, headers: headers, requiresAuthentication: requiresAuthentication)
     }
 
@@ -372,7 +372,7 @@ private class SessionDelegate: NSObject, URLSessionTaskDelegate {
     }
 }
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} enum HTTPMethod: String {
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum HTTPMethod: String {
     case options = "OPTIONS"
     case get = "GET"
     case head = "HEAD"
@@ -384,7 +384,7 @@ private class SessionDelegate: NSObject, URLSessionTaskDelegate {
     case connect = "CONNECT"
 }
 
-{{#nonPublicApi}}internal{{/nonPublicApi}}{{^nonPublicApi}}public{{/nonPublicApi}} protocol ParameterEncoding {
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}protocol ParameterEncoding {
     func encode(_ urlRequest: URLRequest, with parameters: [String: Any]?) throws -> URLRequest
 }
 
