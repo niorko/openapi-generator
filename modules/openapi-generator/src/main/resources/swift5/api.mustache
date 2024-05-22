@@ -464,4 +464,10 @@ extension {{specName}} {
         set { self[{{specName}}.{{classname}}.self] = newValue }
     }
 }
-{{/usePfDependencies}}{{/operations}}
+{{/usePfDependencies}}
+
+{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}extension BackendMockRegistration.PathRegistration {
+    {{#operation}}static var {{#lambda.camelcase_param}}{{specName}}{{/lambda.camelcase_param}}_{{classname}}{{#-first}}{{^-last}}_{{operationId}}{{/-last}}{{/-first}}{{^-first}}_{{operationId}}{{/-first}}: Self { .init("{{{pathWithoutArguments}}}") }{{^-last}}
+    {{/-last}}{{/operation}}
+}
+{{/operations}}
