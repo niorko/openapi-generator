@@ -615,9 +615,6 @@ public class Swift5ClientCodegen extends DefaultCodegen implements CodegenConfig
             supportingFiles.add(new SupportingFile("git_push.sh.mustache",
                     "",
                     "git_push.sh"));
-            supportingFiles.add(new SupportingFile("SynchronizedDictionary.mustache",
-                    sourceFolder,
-                    "SynchronizedDictionary.swift"));
             supportingFiles.add(new SupportingFile("XcodeGen.mustache",
                     "",
                     "project.yml"));
