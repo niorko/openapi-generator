@@ -18,7 +18,8 @@ import Foundation
             let encodeResult = CodableHelper.encode(encodableObj)
             do {
                 let data = try encodeResult.get()
-                params = JSONDataEncoding.encodingParameters(jsonData: data)
+                let patchedData = patchDecimals(data: data)
+                params = JSONDataEncoding.encodingParameters(jsonData: patchedData)
             } catch {
                 print(error.localizedDescription)
             }
@@ -33,7 +34,8 @@ import Foundation
         if let encodableObj = encodableObj {
             do {
                 let data = try JSONSerialization.data(withJSONObject: encodableObj, options: .prettyPrinted)
-                params = JSONDataEncoding.encodingParameters(jsonData: data)
+                let patchedData = patchDecimals(data: data)
+                params = JSONDataEncoding.encodingParameters(jsonData: patchedData)
             } catch {
                 print(error.localizedDescription)
                 return nil
@@ -43,4 +45,26 @@ import Foundation
         return params
     }
 
+    /// Swift's Foundation `JSONEncoder` has a known issue where `Decimal` values, such as 4.18,
+    /// are encoded with slight floating-point precision errors (e.g., 4.18 might be encoded as 4.1799999999999997).
+    ///
+    /// To avoid this, the `KeyedEncodingContainerProtocol.encode(_: Decimal, forKey: Self.Key)` method
+    /// has been customized to encode `Decimal` values as strings, by surrounding them with special markers `«` and `»`.
+    /// This ensures precise representation during encoding (e.g., "«4.18»").
+    ///
+    /// The `patchDecimals(data:)` method is then responsible for converting these specially-marked
+    /// string-encoded `Decimal` values back into actual decimal values when generating the final JSON output.
+    /// It does this by removing the `«` and `»` markers along with the surrounding quotes, so the resulting
+    /// JSON contains the correct decimal representation (e.g., 4.18 instead of a string).
+    ///
+    /// For example:
+    /// Input: {"amount": "«4.18»"}
+    /// Output: {"amount": 4.18}
+    private static func patchDecimals(data: Data) -> Data {
+        let jsonString = String(data: data, encoding: .utf8) ?? ""
+        let patchedJson = jsonString
+            .replacingOccurrences(of: "\"«", with: "")
+            .replacingOccurrences(of: "»\"", with: "")
+        return patchedJson.data(using: .utf8) ?? data
+    }
 }

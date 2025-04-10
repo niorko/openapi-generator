@@ -29,7 +29,7 @@ extension URLSession: URLSessionProtocol {}
     }
 }
 
-typealias {{projectName}}APIChallengeHandler = ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))
+typealias {{projectName}}APIChallengeHandler = (@Sendable (URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?))
 
 // Store the URLSession to retain its reference
 private let defaultURLSession = URLSession(configuration: .default, delegate: nil, delegateQueue: nil)
@@ -95,20 +95,20 @@ class URLSessionRequestBuilder<T>: RequestBuilder<T> {
     @discardableResult
     override func execute() async throws -> Response<T> {
         let urlSession = createURLSession()
-        
+
         guard let xMethod = HTTPMethod(rawValue: method) else {
             fatalError("Unsupported Http method - \(method)")
         }
-        
+
         let encoding: ParameterEncoding
-        
+
         switch xMethod {
         case .get, .head:
             encoding = URLEncoding()
-            
+
         case .options, .post, .put, .patch, .delete, .trace, .connect:
             let contentType = headers["Content-Type"] ?? "application/json"
-            
+
             if contentType.hasPrefix("application/json") {
                 encoding = JSONDataEncoding()
             } else if contentType.hasPrefix("multipart/form-data") {
@@ -119,21 +119,23 @@ class URLSessionRequestBuilder<T>: RequestBuilder<T> {
                 fatalError("Unsupported Media Type - \(contentType)")
             }
         }
-        
+
         let request: URLRequest
         do {
             request = try createURLRequest(urlSession: urlSession, method: xMethod, encoding: encoding, headers: headers)
         } catch {
             throw ErrorResponse.error(415, nil, nil, error)
         }
-    
+
         do {
             let sessionDelegate = SingleRequestSessionDelegate(handler: taskDidReceiveChallenge, credential: credential)
             let (data, response) = try await urlSession.data(for: request, delegate: sessionDelegate)
             let _ = sessionDelegate  // To hold the reference until URLSession is finished with task
-            
+
             return try processRequestResponse(urlRequest: request, data: data, response: response, error: nil)
         } catch {
+            try Task.checkCancellation()
+
             return try processRequestResponse(urlRequest: request, data: nil, response: nil, error: error)
         }
     }
@@ -146,7 +148,7 @@ class URLSessionRequestBuilder<T>: RequestBuilder<T> {
             }
             throw ErrorResponse.error(-1, data, response, error)
         }
-        
+
         guard let httpResponse = response as? HTTPURLResponse else {
             throw ErrorResponse.error(-2, data, response, DecodableRequestBuilderError.nilHTTPResponse)
         }
@@ -322,38 +324,42 @@ class URLSessionDecodableRequestBuilder<T: Decodable>: URLSessionRequestBuilder<
 }
 
 final class SingleRequestSessionDelegate: NSObject, URLSessionTaskDelegate {
-    
+
     private let challengeHandler: BackendClientAPIChallengeHandler?
     private let credential: URLCredential?
-    
+
     init(handler: BackendClientAPIChallengeHandler?, credential: URLCredential?) {
         self.challengeHandler = handler
         self.credential = credential
     }
-    
-    func urlSession(
-        _ session: URLSession,
-        task: URLSessionTask,
-        didReceive challenge: URLAuthenticationChallenge
-    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
         var newCredential: URLCredential?
         var disposition: URLSession.AuthChallengeDisposition = .performDefaultHandling
-        
+
         if let challengeHandler {
-            (disposition, newCredential) = challengeHandler(session, task, challenge)
+            (disposition, newCredential) = await challengeHandler(challenge)
         } else {
             if challenge.previousFailureCount > 0 {
                 disposition = .rejectProtectionSpace
             } else {
                 newCredential = credential ?? session.configuration.urlCredentialStorage?.defaultCredential(for: challenge.protectionSpace)
-                
+
                 if newCredential != nil {
                     disposition = .useCredential
                 }
             }
         }
-        
+
         return (disposition, newCredential)
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        await urlSession(session, didReceive: challenge)
     }
 }
 
