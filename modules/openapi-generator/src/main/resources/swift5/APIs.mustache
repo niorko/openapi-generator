@@ -12,25 +12,25 @@ import Vapor
 
 {{#swiftApiConfigPerSpec}}
 
-{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}extension {{projectName}} {
-    
-enum {{specName}} {
+public extension {{projectName}} {
+
+public enum {{specName}} {
 {{/swiftApiConfigPerSpec}}
 {{^swiftApiConfigPerSpec}}
 
-{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum {{projectName}} {
+public enum {{projectName}} {
 {{/swiftApiConfigPerSpec}}
 
-    {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}enum Config: BackendConfig {
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var basePath = "{{{basePath}}}"
+    public enum Config: BackendConfig {
+        public static var basePath = "{{{basePath}}}"
         {{#useVapor}}
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var customHeaders: HTTPHeaders = [:]
+        public static var customHeaders: HTTPHeaders = [:]
         {{/useVapor}}
         {{^useVapor}}
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var customHeaders: [String: String] = [:]
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var credential: URLCredential?{{#useAlamofire}}
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
-        {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
+        public static var customHeaders: [String: String] = [:]
+        public static var credential: URLCredential?{{#useAlamofire}}
+        public static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
+        public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
         {{/useVapor}}
     }
 
