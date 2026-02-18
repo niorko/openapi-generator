@@ -14,11 +14,11 @@ import Vapor
 
 public extension {{projectName}} {
 
-public enum {{specName}} {
+enum {{specName}} {
 {{/swiftApiConfigPerSpec}}
 {{^swiftApiConfigPerSpec}}
 
-public enum {{projectName}} {
+enum {{projectName}} {
 {{/swiftApiConfigPerSpec}}
 
     public enum Config: BackendConfig {
