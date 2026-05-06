@@ -21,16 +21,16 @@ enum {{specName}} {
 enum {{projectName}} {
 {{/swiftApiConfigPerSpec}}
 
-    public enum Config: BackendConfig {
-        public static var basePath = "{{{basePath}}}"
+    public enum Config: BackendConfig, Sendable {
+        nonisolated(unsafe) public static var basePath = "{{{basePath}}}"
         {{#useVapor}}
-        public static var customHeaders: HTTPHeaders = [:]
+        nonisolated(unsafe) public static var customHeaders: HTTPHeaders = [:]
         {{/useVapor}}
         {{^useVapor}}
-        public static var customHeaders: [String: String] = [:]
-        public static var credential: URLCredential?{{#useAlamofire}}
-        public static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
-        public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
+        nonisolated(unsafe) public static var customHeaders: [String: String] = [:]
+        nonisolated(unsafe) public static var credential: URLCredential?{{#useAlamofire}}
+        nonisolated(unsafe) public static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory(){{/useAlamofire}}{{#useURLSession}}
+        nonisolated(unsafe) public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory(){{/useURLSession}}
         {{/useVapor}}
     }
 

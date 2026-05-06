@@ -29,7 +29,7 @@ extension {{specName}} {
 
 {{#description}}
 /** {{{.}}} */{{/description}}
-{{#objcCompatible}}@objcMembers {{/objcCompatible}}{{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}open {{/nonPublicApi}}class {{classname}}{{#usePfDependencies}}: DependencyKey{{/usePfDependencies}}{{^usePfDependencies}}{{#objcCompatible}} : NSObject{{/objcCompatible}}{{/usePfDependencies}} {
+{{#objcCompatible}}@objcMembers {{/objcCompatible}}{{#nonPublicApi}}final {{/nonPublicApi}}{{^nonPublicApi}}open {{/nonPublicApi}}class {{classname}}{{#usePfDependencies}}: DependencyKey, Sendable{{/usePfDependencies}}{{^usePfDependencies}}{{#objcCompatible}} : NSObject{{/objcCompatible}}{{/usePfDependencies}} {
 {{#usePfDependencies}}
 
     {{#nonPublicApi}}{{/nonPublicApi}}{{^nonPublicApi}}public {{/nonPublicApi}}static let liveValue = {{classname}}()
